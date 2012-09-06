@@ -52,10 +52,7 @@
   
   <td class="sign_up_navigation">
     <% if user_signed_in? %>
-      <%= link_to 'Edit account', edit_user_registration_path %>
-      <% if current_user.has_role? :admin %>
-        <%= link_to 'Admin', users_path %>
-      <% end %>
+      <%= link_to 'Edit account', edit_user_registration_path %>      
     <% else %>
       <%= link_to image_tag("/assets/facebook_login.png"), user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "popup facebook_navigation_top", :"data-width" => 600, :"data-height" => 400 %>
       <%= link_to 'Sign up', new_user_registration_path %>
