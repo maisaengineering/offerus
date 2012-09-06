@@ -1,4 +1,5 @@
 Offerus::Application.routes.draw do
+
   devise_for :users
 
   resources :products do
@@ -13,6 +14,6 @@ Offerus::Application.routes.draw do
   end
 
   resources :tribes
-  root :to => 'tribes#index'
+  root :to => "products#solar"
 
 end

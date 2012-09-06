@@ -8,6 +8,8 @@ gem 'rails', '3.2.8'
 gem 'mysql2'
 gem "devise", ">= 2.1.0"
 gem "twitter-bootstrap-rails", ">= 2.0.3"
+gem 'activeadmin'
+gem "meta_search",    '>= 1.1.0.pre'
 
 # Gems used only for assets and not required
 # in production environments by default.
