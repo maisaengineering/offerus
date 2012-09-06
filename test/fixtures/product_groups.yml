@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  product_id: MyString
+  zipcode: MyString
+  map_lat: MyString
+  map_lng: MyString
+
+two:
+  product_id: MyString
+  zipcode: MyString
+  map_lat: MyString
+  map_lng: MyString

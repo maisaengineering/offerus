@@ -1,0 +1,29 @@
+<%= form_for(@tribe) do |f| %>
+  <% if @tribe.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@tribe.errors.count, "error") %> prohibited this tribe from being saved:</h2>
+
+      <ul>
+      <% @tribe.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :tribe_name %><br />
+    <%= f.text_field :tribe_name %>
+  </div>
+  <div class="field">
+    <%= f.label :category %><br />
+    <%= f.text_field :category %>
+  </div>
+  <div class="field">
+    <%= f.label :location %><br />
+    <%= f.text_field :location %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

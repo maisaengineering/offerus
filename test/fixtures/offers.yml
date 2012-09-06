@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  product_id: MyString
+  offer_price: MyString
+  retail_price: MyString
+  size: MyString
+  min_no_of_price: MyString
+
+two:
+  product_id: MyString
+  offer_price: MyString
+  retail_price: MyString
+  size: MyString
+  min_no_of_price: MyString
