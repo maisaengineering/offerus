@@ -1,5 +1,6 @@
 Offerus::Application.routes.draw do
-  
+  devise_for :users
+
   resources :products do
     collection do 
       post "add_comment"
@@ -12,6 +13,6 @@ Offerus::Application.routes.draw do
   end
 
   resources :tribes
-  root :to => "products#solar"
+  root :to => 'tribes#index'
 
 end
