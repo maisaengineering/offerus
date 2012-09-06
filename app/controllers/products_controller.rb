@@ -1,83 +1,95 @@
 class ProductsController < ApplicationController
-  # GET /products
-  # GET /products.json
+
   def index
     @products = Product.all
-
+    if params[:query]
+      @products = Product.all(:conditions => ["product_name LIKE ?", "%#{params[:query]}%"], :order => 'name', :limit => 5)
+    else
+      # @products = Product.all
+    end
+    
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @products }
+      format.json do
+        if params[:type] == "full"
+          render :json => @products.map(&:_as_json)
+        else
+          render :json => @products.map(&:name)
+        end
+      end
     end
   end
 
-  # GET /products/1
-  # GET /products/1.json
   def show
     @product = Product.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @product }
-    end
   end
 
-  # GET /products/new
-  # GET /products/new.json
   def new
     @product = Product.new
+    @product.offers.build
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @product }
-    end
   end
 
-  # GET /products/1/edit
   def edit
     @product = Product.find(params[:id])
+    as = @product.offers
   end
 
-  # POST /products
-  # POST /products.json
   def create
-    @product = Product.new(params[:product])
-
-    respond_to do |format|
-      if @product.save
-        format.html { redirect_to @product, notice: 'Product was successfully created.' }
-        format.json { render json: @product, status: :created, location: @product }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
-      end
-    end
+    @tribe = Tribe.where(:_id => params[:tribe]).first
+    @tribe.products.create(:product_name => params[:product_name], :members => [Member.new(:uid => current_user.uid)])
+    redirect_to tribe_products_tribes_path(:id => @tribe._id)
   end
 
-  # PUT /products/1
-  # PUT /products/1.json
   def update
     @product = Product.find(params[:id])
-
-    respond_to do |format|
+    @product.offers.destroy
+    #@product.destroy
       if @product.update_attributes(params[:product])
-        format.html { redirect_to @product, notice: 'Product was successfully updated.' }
-        format.json { head :no_content }
+        redirect_to @product, notice: 'Product was successfully updated.'
       else
-        format.html { render action: "edit" }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
+        render action: "edit"
       end
-    end
   end
 
-  # DELETE /products/1
-  # DELETE /products/1.json
   def destroy
     @product = Product.find(params[:id])
     @product.destroy
+    redirect_to products_url
+  end
 
-    respond_to do |format|
-      format.html { redirect_to products_url }
-      format.json { head :no_content }
+  def add_comment
+    product = Product.where(:_id => params[:product_id]).first
+    product.comments.push([Comment.new(:user_id => params[:user_id], :body => params[:body])])
+    redirect_to tribe_products_tribes_path(:id => product.tribe_id.to_s)
+  end
+  
+  def create_offer
+    product = Product.where(:_id => params[:product_id]).first
+    product.offers.push([Offer.new(:retails_price => params[:retails_price],:min_no_of_buyer => params[:min_no_of_buyer], \
+    :offer_name => params[:offer_name], :offer_description => params[:offer_description], :offer_price => params[:offer_price])])
+    redirect_to tribe_products_tribes_path(:id => product.tribe_id.to_s)
+  end
+  
+  def solar 
+  end
+  
+  def product_group       
+   product = Product.all.first   
+   product.product_groups.push([ProductGroup.new(:zipcode => params[:product][:zipcode], :map_lng => params[:product][:map_lng], :map_lat => params[:product][:map_lat])]) if Product.where("product_groups.zipcode" => params[:product][:zipcode]).first.nil?
+   redirect_to solar_offers_products_path(:zipcode => params[:product][:zipcode])
+  end
+  
+  def solar_offers  
+    @zipcode = params[:zipcode]
+    @group_details = Product.where("product_groups.zipcode" => params[:zipcode]).first    
+    @group_details.product_groups.each do |each_product_group|
+      if each_product_group.zipcode == params[:zipcode]
+        @current_zipcode = each_product_group 
+      end
     end
+  end
+  
+  def solar_group_offers
   end
 end
