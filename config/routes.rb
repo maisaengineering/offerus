@@ -3,7 +3,6 @@ Offerus::Application.routes.draw do
 
   devise_for :admin_users, ActiveAdmin::Devise.config
 
-  devise_for :users
 
   resources :products do
     collection do 
@@ -18,5 +17,10 @@ Offerus::Application.routes.draw do
 
   resources :tribes
   root :to => "products#solar"
+  devise_for :users,  :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+  #devise_scope :user do
+  #  get '/users/auth/:provider' => 'users/omniauth_callbacks#passthru'
+  #end
+  resources :users, :only => [:show, :index]
 
 end
